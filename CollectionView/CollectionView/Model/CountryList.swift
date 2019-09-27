@@ -8,31 +8,22 @@
 import Foundation
 import UIKit
 
-
-
 struct CountryList: Codable {
     var name: String
     var flag: String
     var capital: String
     var population: Int
-    var currencies: [Currency]
-    
-    static func getInfo(from data: Data) -> [CountryList]? {
-        do {
-            let countries = try JSONDecoder().decode([CountryList].self, from: data)
-            return countries
-        } catch let decodeError {
-            fatalError("Could not decode \(decodeError)")
+    var currencies: [CurrencyInfo]
+    var alpha2Code: String?
+    var imageURL: String {
+        if alpha2Code != nil || alpha2Code != "" {
+            return "https://www.countryflags.io/\(alpha2Code!.lowercased())/flat/64.png"
+        } else {
+            return "no Image"
         }
-        
-}
-    
-    
+    }
 }
 
-struct Currency: Codable {
-    var code: String
-    var name: String
-    var symbol: String
-    
+struct CurrencyInfo: Codable {
+    var symbol: String?
 }
