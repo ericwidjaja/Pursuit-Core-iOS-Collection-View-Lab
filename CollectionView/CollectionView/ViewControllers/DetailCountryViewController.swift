@@ -10,7 +10,7 @@ import UIKit
 
 class DetailCountryViewController: UIViewController {
     
-    var detailCountry : CountryList!
+    var detailCountry: CountryList!
     
     @IBOutlet weak var detailName: UILabel!
     
@@ -23,9 +23,9 @@ class DetailCountryViewController: UIViewController {
     @IBOutlet weak var detailCurrency: UILabel!
     
     
-    private func loadDetails(){
+    func loadDetails(){
         detailName.text = detailCountry.name
-        detailCapital.text = "Capital: \(detailCountry.capital)"
+        detailCapital.text = "Capital: \(String(describing: detailCountry.capital))"
         detailPopulation.text = "Population: \(detailCountry.population)"
         ImageAPIClient.manager.loadImage(from: detailCountry.imageURL) { (result) in
             DispatchQueue.main.async {
@@ -39,7 +39,7 @@ class DetailCountryViewController: UIViewController {
         }
     }
     override func viewDidLoad() {
-        loadDetails()
         super.viewDidLoad()
+        loadDetails()
     }
 }

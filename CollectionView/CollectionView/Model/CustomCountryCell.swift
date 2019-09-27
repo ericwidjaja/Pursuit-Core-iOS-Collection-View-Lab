@@ -22,7 +22,5 @@ class CustomCountryCell: UICollectionViewCell {
     @IBOutlet weak var populationLabel: UILabel!
     
     @IBOutlet weak var flagView: UIImageView!
-    
-    
 
 }

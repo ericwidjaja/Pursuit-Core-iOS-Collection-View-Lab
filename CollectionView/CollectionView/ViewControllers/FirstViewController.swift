@@ -10,6 +10,12 @@ import UIKit
 
 class FirstViewController: UIViewController {
     
+    var countries = [CountryList]() {
+        didSet {
+            countryCollectionView.reloadData()
+        }
+    }
+    
     @IBOutlet weak var countrySearchBar: UISearchBar!
     
     @IBOutlet weak var countryCollectionView: UICollectionView!
@@ -17,11 +23,6 @@ class FirstViewController: UIViewController {
     var countrySearchString: String? {
         didSet {
             loadSearch(str: countrySearchString ?? "United")
-        }
-    }
-    var countries = [CountryList]() {
-        didSet {
-            countryCollectionView.reloadData()
         }
     }
     
@@ -46,18 +47,6 @@ class FirstViewController: UIViewController {
         countryCollectionView.dataSource = self
         countrySearchBar.delegate = self
         super.viewDidLoad()
-    }
-    
-    private func loadCountries() {
-        CountryListAPIManager.manager.getCountry(searchWord: "") { (result) in DispatchQueue.main.async {
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let countryData):
-                self.countries = countryData
-                }
-            }
-        }
     }
 }
 
@@ -92,16 +81,14 @@ extension FirstViewController: UICollectionViewDataSource, UICollectionViewDeleg
     }
         
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 400, height: 200)
+        return CGSize(width: 200, height: 200)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let selectedCell = sender as! CustomCountryCell
-        let index = (countryCollectionView.indexPath(for: selectedCell)?.row)!
-        if segue.identifier == "countrySegue" {
-            let destination = segue.destination as! DetailCountryViewController
-            destination.detailCountry = countries[index]
-        }
+        guard let destinationVC = segue.destination as? DetailCountryViewController else {return}
+        let cell = sender as! CustomCountryCell
+        let indexPath = countryCollectionView.indexPath(for: cell)!
+        destinationVC.detailCountry = countries[indexPath.row]
     }
 }
 extension FirstViewController: UISearchBarDelegate {
